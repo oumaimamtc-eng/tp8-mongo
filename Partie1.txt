@@ -1,0 +1,203 @@
+-- 1. Créer les collections : produits, clients et commandes dans une base de données ecommerceDB. 
+use ecommerceDB
+switched to db ecommerceDB
+db.createCollection("Produits")
+{ ok: 1 }
+db.createCollection("Clients")
+{ ok: 1 }
+db.createCollection("Commandes")
+{ ok: 1 }
+-- 2.Insertion
+db.Produits.insertMany([{Nom : "Smartphone XYZ", Catégorie : "Électronique", Prix : 599.99, Stock : 10}, 
+                        {Nom : "Chaussures de sport", Catégorie : "Mode", Prix : 75.00, Stock : 30},
+                        {Nom : "Laptop ABC", Catégorie : "Électronique", Prix : 899.99, Stock : 5},
+                        {Nom : "Livre de recettes", Catégorie : "Livres", Prix : 20.00, Stock : 50},
+                        {Nom : "Casque audio", Catégorie : "Électronique", Prix : 49.99, Stock : 25}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('690f652a5e192b2a7c807b0c'),
+    '1': ObjectId('690f652a5e192b2a7c807b0d'),
+    '2': ObjectId('690f652a5e192b2a7c807b0e'),
+    '3': ObjectId('690f652a5e192b2a7c807b0f'),
+    '4': ObjectId('690f652a5e192b2a7c807b10')
+  }
+}
+db.Clients.insertMany([{Nom : " Ahmed Ben Saïd", Email : " ahmed.ben.said@mail.com", Adresse : " 10 Rue Al Madina,  Casablanca, Maroc ", Téléphone : "+212600123456"}, 
+                       {Nom : " Fatima El Khalil", Email : "fatima.el.khalil@mail.com", Adresse : " 25 Avenue des Palmiers Rabat Maroc", Téléphone : "+ 212600987654"},
+                       {Nom : " Noura Bakkar", Email : " noura.bakkar@mail.com", Adresse : " 22 Rue des Palmiers, Tunis, Tunisie", Téléphone : " +216983456789"}, 
+                       {Nom : " Aisha Darwish", Email : " aisha.darwish@mail.com", Adresse : " 35 Rue Al Kindi, Damas, Syrie", Téléphone : " +963991234567"},
+                       {Nom : " Hassan Al-Haddad", Email : "hassan.haddad@mail.com", Adresse : "12 Rue Al Mutanabi, Bagdad, Irak", Téléphone : " +964781223344"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('690f66f85e192b2a7c807b11'),
+    '1': ObjectId('690f66f85e192b2a7c807b12'),
+    '2': ObjectId('690f66f85e192b2a7c807b13'),
+    '3': ObjectId('690f66f85e192b2a7c807b14'),
+    '4': ObjectId('690f66f85e192b2a7c807b15')
+  }
+}
+db.Commandes.insertMany([{Client: "Fatima El Khalil",Produits: ["1x Smartphone XYZ", "2x Livre de recettes"],Date_commande: Date("2024-11-01"),Statut: "livrée",Montant_total: 639.99},
+                         {Client: "Hassan Al-Haddad",Produits: ["1x Laptop ABC", "1x Casque audio"],Date_commande: Date("2024-11-03"),Statut: "en cours",Montant_total: 949.98}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('690f6f8e5e192b2a7c807b18'),
+    '1': ObjectId('690f6f8e5e192b2a7c807b19')
+  }
+}
+//3. Afficher tous les produits en stock.
+db.Produits.find({ Stock: { $gt: 0 } })
+{
+  _id: ObjectId('690f652a5e192b2a7c807b0c'),
+  Nom: 'Smartphone XYZ',
+  'Catégorie': 'Électronique',
+  Prix: 599.99,
+  Stock: 10
+}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b0d'),
+  Nom: 'Chaussures de sport',
+  'Catégorie': 'Mode',
+  Prix: 75,
+  Stock: 30
+}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b0e'),
+  Nom: 'Laptop ABC',
+  'Catégorie': 'Électronique',
+  Prix: 899.99,
+  Stock: 5
+}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b0f'),
+  Nom: 'Livre de recettes',
+  'Catégorie': 'Livres',
+  Prix: 20,
+  Stock: 50
+}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b10'),
+  Nom: 'Casque audio',
+  'Catégorie': 'Électronique',
+  Prix: 49.99,
+  Stock: 25
+}
+-- 4. Rechercher tous les clients dont l'adresse contient "Paris".
+db.Clients.find({Adresse:/Paris/})
+# find(0) Il n y a aucun client dont l adresse contient  "Paris"
+-- 5. Afficher toutes les commandes d’un client particulier (par exemple, Alice Dupont).
+db.Commandes.find({Client:"Hassan Al-Haddad"})
+{
+  _id: ObjectId('690f6f8e5e192b2a7c807b19'),
+  Client: 'Hassan Al-Haddad',
+  Produits: [
+    '1x Laptop ABC',
+    '1x Casque audio'
+  ],
+  Date_commande: 'Sat Nov 08 2025 17:27:58 GMT+0100 (UTC+01:00)',
+  Statut: 'en cours',
+  Montant_total: 949.98
+
+-- 6. Rechercher toutes les commandes livrées. 
+db.Commandes.find({Statut:"livrée"})
+{
+  _id: ObjectId('690f6f8e5e192b2a7c807b18'),
+  Client: 'Fatima El Khalil',
+  Produits: [
+    '1x Smartphone XYZ',
+    '2x Livre de recettes'
+  ],
+  Date_commande: 'Sat Nov 08 2025 17:27:58 GMT+0100 (UTC+01:00)',
+  Statut: 'livrée',
+  Montant_total: 639.99
+}
+-- 7. Le stock du produit "Smartphone XYZ" doit être mis à jour suite à une nouvelle livraison (ajoutez 10 unités de stock). 
+db.Produits.updateOne({Nom:"Smartphone XYZ"},{$inc:{Stock:10}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+-- 8. Modifier le statut de la commande de Hassan Al-Haddad pour passer de "en cours" à "expédiée". 
+db.Commandes.updateOne({Client:"Hassan Al-Haddad"},{$set:{Statut:"expédiée"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+-- 9. Supprimer un produit qui est épuisé (par exemple, un produit dont le stock est égal à 0). 
+db.Produits.deleteMany({Stock:0})
+{
+  acknowledged: true,
+  deletedCount: 0
+}
+-- 10. Supprimer une commande annulée.
+db.Commandes.deleteMany({ Statut: "annulée" })
+{
+  acknowledged: true,
+  deletedCount: 0
+}
+-- 11. Trouver tous les produits de la catégorie "Électronique" dont le prix est inférieur à 100. 
+db.Produits.find({Catégorie : "Électronique",Prix:{$lt:100}}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b10'),
+  Nom: 'Casque audio',
+  'Catégorie': 'Électronique',
+  Prix: 49.99,
+  Stock: 25
+}
+-- 12. Compter le nombre total de commandes passées par chaque client. 
+db.Commandes.aggregate({$group:{_id:"$Client",totalCommandes:{$sum:1}}})
+{
+  _id: 'Hassan Al-Haddad',
+  totalCommandes: 1
+}
+{
+  _id: 'Fatima El Khalil',
+  totalCommandes: 1
+}
+-- 13. Afficher les 5 produits les plus chers dans la collection.
+db.Produits.aggregate([
+  { $sort: { Prix: -1 } },
+  { $limit: 5 }])
+ {
+  _id: ObjectId('690f652a5e192b2a7c807b0e'),
+  Nom: 'Laptop ABC',
+  'Catégorie': 'Électronique',
+  Prix: 899.99,
+  Stock: 5
+} 
+{
+  _id: ObjectId('690f652a5e192b2a7c807b0c'),
+  Nom: 'Smartphone XYZ',
+  'Catégorie': 'Électronique',
+  Prix: 599.99,
+  Stock: 20
+}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b0d'),
+  Nom: 'Chaussures de sport',
+  'Catégorie': 'Mode',
+  Prix: 75,
+  Stock: 30
+}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b10'),
+  Nom: 'Casque audio',
+  'Catégorie': 'Électronique',
+  Prix: 49.99,
+  Stock: 25
+}
+{
+  _id: ObjectId('690f652a5e192b2a7c807b0f'),
+  Nom: 'Livre de recettes',
+  'Catégorie': 'Livres',
+  Prix: 20,
+  Stock: 50
+}

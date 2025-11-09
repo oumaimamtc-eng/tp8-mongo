@@ -1,0 +1,37 @@
+-- Partie III : Gestion des utilisateurs : 
+-- 1. Créer 3 utilisateurs de la base de données avec des mots de passe : 
+-- a. Administrateur ayant le rôle dbAdmin 
+db.createUser({
+  user: "ahmed",
+  pwd: "123",
+  roles: [ { role: "dbAdmin", db: "ecommerceDB" } ]})
+{ ok: 1 }
+-- b. Utilisateur ayant le rôle userAdmin 
+db.createUser({
+  user: "amin",
+  pwd: "1234",
+  roles: [ { role: "userAdmin", db: "ecommerceDB" } ]
+})
+{ ok: 1 }
+-- c. Visiteur ayant le rôle read 
+db.createUser({
+  user: "salma",
+  pwd: "12345",
+  roles: [ { role: "read", db: "ecommerceDB" } ]
+})
+{ ok: 1 }
+-- 2. Donner la syntaxe de connexion en tant que visiteur 
+C:\Users\Admin>mongosh -u salma -p 12345 --authenticationDatabase admin
+Current Mongosh Log ID: 690fe1987d0cfae127cebea3
+Connecting to:          mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin&appName=mongosh+2.5.8
+Using MongoDB:          8.2.1
+Using Mongosh:          2.5.8
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+-- 3. Supprimer les utilisateurs crées 
+db.dropUser("amin")
+{ ok: 1 }
+db.dropUser("ahmed")
+{ ok: 1 }
+db.dropUser("salma")
+{ ok: 1 }
